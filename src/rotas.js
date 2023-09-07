@@ -7,7 +7,7 @@ const {
   listarLugares,
 } = require("./controladores/controladores");
 const validator = require("./intermediarios/tokenValidator");
-rotas.post("/usuario", cadastro);
+rotas.post("/cadastro", cadastro);
 rotas.post("/login", login);
 rotas.use(validator);
 rotas.post("/lugares", inserirLugares);

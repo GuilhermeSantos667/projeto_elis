@@ -3,6 +3,8 @@ const obterToken = require("../obterToken");
 const jwt = require("jsonwebtoken");
 const senhaJwt = process.env.SENHAJWT;
 const knex = require("../conexao");
+const transport = require(`../transport`)
+
 const cadastro = async (req, res) => {
   const { nome, email, senha } = req.body;
 
@@ -101,9 +103,28 @@ const listarLugares = async (req, res) => {
   }
   return res.status(200).json(query);
 };
+const esqueciSenha = async (req, res) => {
+  const {email} = req.body
+
+  try {
+    const busca = await knex('usuarios').where('email', email).returning('*')
+
+    if(busca.length < 1){
+      return res.status(400).json({message: 'email informado nao existe'})
+    }
+    console.log(busca)
+    // transport.sendMail({
+    //   from:`${process.env.EMAIL_NAME} <${process.env.EMAIL_FROM}>`,
+    //   to: ``
+    // })
+  } catch (error) {
+    return res.status(500).json(error.message)
+  }
+}
 module.exports = {
   cadastro,
   login,
   inserirLugares,
   listarLugares,
+  esqueciSenha
 };
